@@ -1,0 +1,57 @@
+# Database Patterns and Naming Conventions
+
+## Database Connection
+Located in [includes/db.php](mdc:includes/db.php):
+```php
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db   = "posyandukemuning";
+$conn = mysqli_connect($host, $user, $pass, $db);
+```
+
+## Table Naming Conventions
+- `data_balita` - Child data table
+- `pemeriksaan_balita` - Health examination records
+- `user_login` - User authentication table
+
+## Column Naming Patterns
+- Primary keys: `id_balita` (6 digit), `no_register`
+- Foreign keys: `id_balita` (references data_balita)
+- Descriptive names: `na_balita` (nama balita), `na_ibu` (nama ibu)
+- Measurement fields: `bb_balita` (berat badan), `tb_balita` (tinggi badan), `lila_balita` (lingkar lengan atas), `lika_balita` (lingkar kepala)
+
+## Query Patterns
+### Simple SELECT
+```php
+$result = mysqli_query($conn, "SELECT * FROM table_name");
+```
+
+### JOIN Queries
+```php
+$result = mysqli_query($conn, "SELECT p.*, d.na_balita FROM pemeriksaan_balita p JOIN data_balita d ON p.id_balita = d.id_balita");
+```
+
+### Prepared Statements
+```php
+$stmt = mysqli_prepare($conn, "SELECT * FROM table_name WHERE column = ?");
+mysqli_stmt_bind_param($stmt, "s", $parameter);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+```
+
+## Data Types
+- String parameters: `"s"` in bind_param
+- Integer parameters: `"i"` in bind_param
+- Date fields: Use DATE format in database
+
+## Error Handling
+```php
+if (!$conn) {
+    die("Koneksi gagal: " . mysqli_connect_error());
+}
+```
+description:
+globs:
+alwaysApply: true
+---

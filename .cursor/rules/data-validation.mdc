@@ -1,0 +1,55 @@
+# Data Validation Patterns
+
+## ID Format Requirements
+- **ID Balita**: 6 digit angka (contoh: 000001, 000123)
+- **No Register**: Format bebas (contoh: 01, 001, A001)
+
+## NIK Format Requirements
+- **NIK Balita**: 16 digit angka (contoh: 3370909090987654)
+- **NIK Ibu**: 16 digit angka (jika ada)
+
+## Validation Patterns
+### JavaScript Regex Patterns
+```javascript
+// ID Balita validation
+const idBalitaRegex = /^\d{6}$/;
+
+// NIK validation  
+const nikRegex = /^\d{16}$/;
+
+// Phone number validation
+const phoneRegex = /^[0-9]+$/;
+```
+
+### PHP Validation
+```php
+// Check ID Balita format
+if (!preg_match('/^\d{6}$/', $id_balita)) {
+    // Invalid format
+}
+
+// Check NIK format
+if (!preg_match('/^\d{16}$/', $nik_balita)) {
+    // Invalid format
+}
+```
+
+## Real-time Validation
+- Use `onblur` event for field validation
+- Check format first, then check database for duplicates
+- Provide immediate visual feedback with status indicators
+
+## Error Messages
+- **Format Error**: "ID harus 6 digit angka"
+- **Duplicate Error**: "ID Balita sudah digunakan"
+- **NIK Error**: "NIK harus 16 digit angka"
+- **NIK Duplicate**: "NIK sudah terdaftar"
+
+## Visual Feedback Classes
+- `.validation-status.success` - Green checkmark
+- `.validation-status.error` - Red X mark  
+- `.validation-status.warning` - Yellow warning
+description:
+globs:
+alwaysApply: false
+---

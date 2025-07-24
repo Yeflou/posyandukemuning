@@ -1,0 +1,63 @@
+# Authentication and Security Patterns
+
+## Session Management
+All protected pages must include:
+```php
+session_start();
+if (!isset($_SESSION["username"])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+```
+
+## Login Process Pattern
+```php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    
+    $stmt = mysqli_prepare($conn, "SELECT * FROM user_login WHERE username = ?");
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    
+    if ($row = mysqli_fetch_assoc($result)) {
+        if (password_verify($password, $row["password"])) {
+            $_SESSION["username"] = $username;
+            header("Location: dashboard.php");
+            exit();
+        }
+    }
+}
+```
+
+## Logout Pattern
+```php
+session_start();
+session_destroy();
+header("Location: login.php");
+exit();
+```
+
+## Security Best Practices
+- Use `password_verify()` for password authentication
+- Always use prepared statements for database queries
+- Validate all user inputs
+- Implement proper session timeout
+- Use HTTPS in production
+- Sanitize output with `htmlspecialchars()`
+
+## Access Control
+- Check session before accessing any protected resource
+- Redirect unauthorized users to login page
+- Implement role-based access control if needed
+- Log all authentication attempts
+
+## Error Messages
+- Don't reveal specific error details to users
+- Use generic messages like "Username atau password salah!"
+- Log detailed errors for debugging
+description:
+globs:
+alwaysApply: true
+---

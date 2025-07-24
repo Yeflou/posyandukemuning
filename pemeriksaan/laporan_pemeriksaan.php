@@ -17,74 +17,110 @@ $query = "
 $result = mysqli_query($conn, $query);
 ?>
 
-<div class="main">
-    <h2 style="color: #8e2de2;">Laporan Pemeriksaan Balita</h2>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Pemeriksaan Balita</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Search dan Tombol -->
-    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-        <input type="text" id="searchInput" placeholder="Cari Data Pemeriksaan"
-               style="padding: 8px 15px; border-radius: 20px; border: 1px solid #ccc; width: 300px;">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body>
 
-        <button onclick="window.print()"
-                style="background-color: #a55eea; color: white; border: none; border-radius: 30px; padding: 8px 20px; font-weight: bold;">
-            Download PDF
-        </button>
+<div class="header">
+    <h1>Sistem Informasi Pendaftaran dan Pemeriksaan Balita di Posyandu Kemuning 13</h1>
+    <small>Jl KH Samanhudi No. 186, Jantirejo RT 01 RW 13, Sondakan, Laweyan, Surakarta</small>
+</div>
+
+<div class="container">
+    <div class="sidebar">
+        <a href="../auth/beranda.php"><i class="fas fa-home"></i> Beranda</a>
+        <a href="../balita/input_balita.php"><i class="fas fa-user-plus"></i> Input Data Balita</a>
+        <a href="input_pemeriksaan.php"><i class="fas fa-notes-medical"></i> Input Data Pemeriksaan Balita</a>
+        <a href="../balita/laporan_balita.php"><i class="fas fa-file-alt"></i> Laporan Data Balita</a>
+        <a href="laporan_pemeriksaan.php"><i class="fas fa-shield-alt"></i> Laporan Pemeriksaan Balita</a>
+        <a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
-    <!-- Tabel -->
-    <div style="overflow-x: auto;">
-        <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-            <thead style="background-color: #e7d8fb; color: #8e2de2;">
-                <tr>
-                    <th>No</th>
-                    <th>No Register</th>
-                    <th>ID Balita</th>
-                    <th>Nama Balita</th>
-                    <th>Berat Badan (kg)</th>
-                    <th>Tinggi Badan (cm)</th>
-                    <th>Lingkar Lengan (cm)</th>
-                    <th>Lingkar Kepala (cm)</th>
-                    <th>Tanggal Pemeriksaan</th>
-                    <th style="width: 60px;"><i>Aksi</i></th>
-                </tr>
-            </thead>
-            <tbody id="dataBody">
-                <?php
-                $no = 1;
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>{$no}.</td>";
-                    echo "<td>{$row['no_register']}</td>";
-                    echo "<td>{$row['id_balita']}</td>";
-                    echo "<td>{$row['na_balita']}</td>"; // nama balita dari tabel data_balita
-                    echo "<td>{$row['bb_balita']}</td>";
-                    echo "<td>{$row['tb_balita']}</td>";
-                    echo "<td>{$row['lila_balita']}</td>";
-                    echo "<td>{$row['lika_balita']}</td>";
-                    echo "<td>{$row['tanggal_pemeriksaan']}</td>";
-                    echo "<td>
-                        <a href='edit_pemeriksaan.php?id={$row['no_register']}' style='color:#8e2de2; margin-right:10px;'><i class='fas fa-edit'></i></a>
-                        <a href='hapus_pemeriksaan.php?id={$row['no_register']}' onclick=\"return confirm('Yakin ingin menghapus?')\" style='color:#8e2de2;'><i class='fas fa-trash-alt'></i></a>
-                    </td>";
-                    echo "</tr>";
-                    $no++;
-                }
-                ?>
-            </tbody>
-        </table>
+    <div class="main">
+        <h2>Laporan Pemeriksaan Balita</h2>
+
+        <!-- Search dan Tombol -->
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Cari Data Pemeriksaan">
+            </div>
+
+            <button onclick="window.print()" class="download-btn">
+                Download PDF
+            </button>
+        </div>
+
+        <!-- Tabel -->
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>No Register</th>
+                        <th>ID Balita</th>
+                        <th>Nama Balita</th>
+                        <th>Berat Badan (kg)</th>
+                        <th>Tinggi Badan (cm)</th>
+                        <th>Lingkar Lengan (cm)</th>
+                        <th>Lingkar Kepala (cm)</th>
+                        <th>Tanggal Pemeriksaan</th>
+                        <th style="width: 60px;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="dataBody">
+                    <?php
+                    $no = 1;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>{$no}.</td>";
+                        echo "<td>{$row['no_register']}</td>";
+                        echo "<td>{$row['id_balita']}</td>";
+                        echo "<td>{$row['na_balita']}</td>";
+                        echo "<td>{$row['bb_balita']}</td>";
+                        echo "<td>{$row['tb_balita']}</td>";
+                        echo "<td>{$row['lila_balita']}</td>";
+                        echo "<td>{$row['lika_balita']}</td>";
+                        echo "<td>{$row['tanggal_pemeriksaan']}</td>";
+                        echo "<td>
+                            <a href='edit_pemeriksaan.php?id={$row['no_register']}' class='action-btn'><i class='fas fa-edit'></i></a>
+                            <a href='hapus_pemeriksaan.php?id={$row['no_register']}' onclick=\"return confirm('Yakin ingin menghapus?')\" class='action-btn'><i class='fas fa-trash-alt'></i></a>
+                        </td>";
+                        echo "</tr>";
+                        $no++;
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <!-- Filter Search -->
 <script>
+document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("keyup", function () {
-        const filter = searchInput.value.toLowerCase();
-        const rows = document.querySelectorAll("#dataBody tr");
+    const dataBody = document.getElementById("dataBody");
 
-        rows.forEach(row => {
-            const text = row.innerText.toLowerCase();
-            row.style.display = text.includes(filter) ? "" : "none";
+    if (searchInput && dataBody) {
+        searchInput.addEventListener("keyup", function () {
+            const filter = searchInput.value.toLowerCase();
+            const rows = dataBody.querySelectorAll("tr");
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(filter) ? "" : "none";
+            });
         });
-    });
+    }
+});
 </script>
+
+</body>
+</html>

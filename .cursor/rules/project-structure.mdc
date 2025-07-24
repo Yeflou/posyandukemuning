@@ -1,0 +1,35 @@
+# Project Structure Guide
+
+This is a PHP-based Posyandu (Community Health Center) management system with the following structure:
+
+## Core Files
+- [index.php](mdc:index.php) - Main entry point and welcome page
+- [includes/db.php](mdc:includes/db.php) - Database connection configuration
+- [includes/header.php](mdc:includes/header.php) - Common header template
+
+## Module Organization
+- `auth/` - Authentication module (login, logout, dashboard)
+- `balita/` - Child data management (CRUD operations)
+- `pemeriksaan/` - Health examination records
+- `assets/` - Static resources (CSS, images)
+
+## Authentication Pattern
+All protected pages follow this pattern:
+```php
+session_start();
+if (!isset($_SESSION["username"])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
+```
+
+## Database Connection
+Always include [includes/db.php](mdc:includes/db.php) at the top of PHP files that need database access.
+
+## File Naming Conventions
+- CRUD operations: `data_*.php`, `input_*.php`, `edit_*.php`, `hapus_*.php`, `simpan_*.php`, `update_*.php`
+- Reports: `laporan_*.php`, `cetak_*.php`
+description:
+globs:
+alwaysApply: true
+---

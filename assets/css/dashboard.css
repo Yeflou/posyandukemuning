@@ -1,0 +1,257 @@
+/* Dashboard Styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.header {
+    background: linear-gradient(to right, #8e2de2, #34c5cb);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header small {
+    font-size: 13px;
+}
+
+.container {
+    display: flex;
+    height: calc(100vh - 100px);
+}
+
+.sidebar {
+    width: 300px;
+    background-color: #a55eea;
+    padding: 20px 10px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+    width: 80%;
+    text-decoration: none;
+    color: white;
+    background-color: #bb86fc;
+    border-radius: 30px;
+    font-weight: bold;
+    padding: 12px 20px 12px 30px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: #7b4ddb;
+}
+
+.sidebar i {
+    margin-right: 16px;
+    font-size: 18px;
+}
+
+.main {
+    flex: 1;
+    padding: 30px;
+    text-align: left;
+}
+
+.main h2 {
+    color: #8e2de2;
+    text-align: center;
+}
+
+.main img {
+    max-width: 500px;
+    width: 100%;
+}
+
+.enter-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #8e2de2;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 30px;
+    transition: background-color 0.3s ease;
+}
+
+.enter-btn:hover {
+    background-color: #6d19be;
+}
+
+/* Validation Status Styles */
+.validation-status {
+    font-size: 12px;
+    margin-top: -5px;
+    margin-bottom: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.validation-status.success {
+    color: #28a745;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+.validation-status.error {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.validation-status.warning {
+    color: #ffc107;
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+}
+
+/* Form Styles */
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    background-color: #e7d8fb;
+    border: none;
+    box-sizing: border-box;
+}
+
+label {
+    color: #8e2de2;
+    font-weight: bold;
+    display: block;
+    margin-left: 5px;
+}
+
+button {
+    padding: 10px 30px;
+    border-radius: 30px;
+    background-color: #d9b4f2;
+    border: none;
+    font-weight: bold;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #c19de8;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #e7d8fb;
+    color: #8e2de2;
+}
+
+/* Search and Action Styles */
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.search-box {
+    position: relative;
+    width: 300px;
+}
+
+.search-box input {
+    padding: 8px 15px 8px 35px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 9px;
+    color: #aaa;
+}
+
+.download-btn {
+    background-color: #a55eea;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.download-btn:hover {
+    background-color: #8e2de2;
+}
+
+.action-btn {
+    color: #8e2de2;
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.action-btn:hover {
+    color: #6d19be;
+}
+
+/* Message Styles */
+.success-message {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 15px;
+    background-color: #e6ffe6;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 15px;
+    background-color: #ffe6e6;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* Responsive Design */
+@media(max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+    }
+    
+    .main {
+        padding: 15px;
+    }
+} 

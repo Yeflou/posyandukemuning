@@ -1,0 +1,66 @@
+# Reporting and PDF Generation Patterns
+
+## DOMPDF Integration
+The project uses DOMPDF library located in [dompdf/](mdc:dompdf/) directory for PDF generation.
+
+## PDF Generation Pattern
+```php
+require_once '../dompdf/autoload.inc.php';
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
+$options = new Options();
+$options->set('isHtml5ParserEnabled', true);
+$options->set('isPhpEnabled', true);
+
+$dompdf = new Dompdf($options);
+$dompdf->loadHtml($html_content);
+$dompdf->setPaper('A4', 'portrait');
+$dompdf->render();
+$dompdf->stream("filename.pdf", array("Attachment" => false));
+```
+
+## Report File Naming
+- `laporan_*.php` - Generate reports
+- `cetak_*.php` - Print/PDF generation
+
+## HTML to PDF Structure
+```php
+$html = '
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Report Title</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Report Title</h1>
+    <!-- Report content -->
+</body>
+</html>';
+```
+
+## Data Retrieval for Reports
+```php
+$result = mysqli_query($conn, "SELECT * FROM table_name WHERE condition");
+$data = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $data[] = $row;
+}
+```
+
+## Report Styling
+- Use Arial font for better PDF rendering
+- Simple table styling with borders
+- Avoid complex CSS that might not render in PDF
+- Use inline styles for consistent PDF output
+description:
+globs:
+alwaysApply: true
+---

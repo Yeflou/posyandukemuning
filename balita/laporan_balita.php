@@ -11,69 +11,91 @@ $query = "SELECT * FROM data_balita";
 $result = mysqli_query($conn, $query);
 ?>
 
-<div class="main">
-    <h2 style="color: #8e2de2;">Laporan Data Balita</h2>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Data Balita</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 
-    <!-- Search dan Tombol -->
-    <!-- Search dan Tombol -->
-<div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-    <div style="position: relative; width: 300px;">
-        <input type="text" id="searchInput" placeholder="Cari Data Pemeriksaan"
-               style="padding: 8px 15px 8px 35px; border-radius: 20px; border: 1px solid #ccc; width: 100%;">
-        <i class="fas fa-search" style="position: absolute; left: 12px; top: 9px; color: #aaa;"></i>
-    </div>
-
-    <button onclick="window.print()"
-            style="background-color: #a55eea; color: white; border: none; border-radius: 30px; padding: 8px 20px; font-weight: bold;">
-        Download PDF
-    </button>
+<div class="header">
+    <h1>Sistem Informasi Pendaftaran dan Pemeriksaan Balita di Posyandu Kemuning 13</h1>
+    <small>Jl KH Samanhudi No. 186, Jantirejo RT 01 RW 13, Sondakan, Laweyan, Surakarta</small>
 </div>
 
+<div class="container">
+    <div class="sidebar">
+        <a href="../auth/beranda.php"><i class="fas fa-home"></i> Beranda</a>
+        <a href="input_balita.php"><i class="fas fa-user-plus"></i> Input Data Balita</a>
+        <a href="../pemeriksaan/input_pemeriksaan.php"><i class="fas fa-notes-medical"></i> Input Data Pemeriksaan Balita</a>
+        <a href="laporan_balita.php"><i class="fas fa-file-alt"></i> Laporan Data Balita</a>
+        <a href="../pemeriksaan/laporan_pemeriksaan.php"><i class="fas fa-shield-alt"></i> Laporan Pemeriksaan Balita</a>
+        <a href="../auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
 
-    <!-- Tabel -->
-    <div style="overflow-x: auto;">
-        <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-            <thead style="background-color: #e7d8fb; color: #8e2de2;">
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-                <tr>
-                    <th>No</th>
-                    <th>Id Balita</th>
-                    <th>Nama Ibu Balita</th>
-                    <th>Nama Balita</th>
-                    <th>NIK Balita</th>
-                    <th>Alamat Balita</th>
-                    <th>Tempat Lahir</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Jenis Kelamin</th>
-                    <th>No. Telp</th>
-                    <th style="width: 50px;"><i>Aksi</i></th>
-                </tr>
-            </thead>
-            <tbody id="dataBody">
-                <?php
-                $no = 1;
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>{$no}.</td>";
-                    echo "<td>{$row['id_balita']}</td>";
-                    echo "<td>{$row['na_ibu']}</td>";
-                    echo "<td>{$row['na_balita']}</td>";
-                    echo "<td>{$row['nik_balita']}</td>";
-                    echo "<td>{$row['alamat_balita']}</td>";
-                    echo "<td>{$row['tempat_lahir']}</td>";
-                    echo "<td>{$row['tanggal_lahir_balita']}</td>";
-                    echo "<td>{$row['jenis_kelamin']}</td>";
-                    echo "<td>{$row['no_tlp']}</td>";
-                    echo "<td>
-                        <a href='edit_balita.php?id={$row['id_balita']}' style='color:#8e2de2; margin-right:10px;'><i class='fas fa-edit'></i></a>
-                        <a href='hapus_balita.php?id={$row['id_balita']}' onclick=\"return confirm('Yakin ingin menghapus?')\" style='color:#8e2de2;'><i class='fas fa-trash-alt'></i></a>
-                    </td>";
-                    echo "</tr>";
-                    $no++;
-                }
-                ?>
-            </tbody>
-        </table>
+    <div class="main">
+        <h2>Laporan Data Balita</h2>
+
+        <!-- Search dan Tombol -->
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Cari Data Balita">
+                <i class="fas fa-search"></i>
+            </div>
+
+            <button onclick="window.print()" class="download-btn">
+                Download PDF
+            </button>
+        </div>
+
+        <!-- Tabel -->
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Id Balita</th>
+                        <th>Nama Ibu Balita</th>
+                        <th>Nama Balita</th>
+                        <th>NIK Balita</th>
+                        <th>Alamat Balita</th>
+                        <th>Tempat Lahir</th>
+                        <th>Tanggal Lahir</th>
+                        <th>Jenis Kelamin</th>
+                        <th>No. Telp</th>
+                        <th style="width: 50px;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="dataBody">
+                    <?php
+                    $no = 1;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>{$no}.</td>";
+                        echo "<td>{$row['id_balita']}</td>";
+                        echo "<td>{$row['na_ibu']}</td>";
+                        echo "<td>{$row['na_balita']}</td>";
+                        echo "<td>{$row['nik_balita']}</td>";
+                        echo "<td>{$row['alamat_balita']}</td>";
+                        echo "<td>{$row['tempat_lahir']}</td>";
+                        echo "<td>{$row['tanggal_lahir_balita']}</td>";
+                        echo "<td>{$row['jenis_kelamin']}</td>";
+                        echo "<td>{$row['no_tlp']}</td>";
+                        echo "<td>
+                            <a href='edit_balita.php?id={$row['id_balita']}' class='action-btn'><i class='fas fa-edit'></i></a>
+                            <a href='#' onclick=\"confirmDelete('{$row['id_balita']}', '{$row['na_balita']}')\" class='action-btn'><i class='fas fa-trash-alt'></i></a>
+                        </td>";
+                        echo "</tr>";
+                        $no++;
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -93,8 +115,54 @@ document.addEventListener("DOMContentLoaded", function () {
                 row.style.display = text.includes(filter) ? "" : "none";
             });
         });
-    } else {
-        console.warn("Search input atau data body tidak ditemukan.");
+    }
+});
+
+// Fungsi konfirmasi hapus dengan SweetAlert2
+function confirmDelete(idBalita, namaBalita) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Hapus Data Balita?',
+        html: `Apakah Anda yakin ingin menghapus data balita <strong>${namaBalita}</strong> (ID: ${idBalita})?<br><br><small style="color: #dc3545;">Tindakan ini tidak dapat dibatalkan!</small>`,
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Redirect ke halaman hapus
+            window.location.href = `hapus_balita.php?id=${idBalita}`;
+        }
+    });
+}
+
+// Tampilkan notifikasi jika ada parameter status di URL
+document.addEventListener("DOMContentLoaded", function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
+    const message = urlParams.get('message');
+    
+    if (status === 'success' && message) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: message,
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#8e2de2'
+        });
+    } else if (status === 'error' && message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: message,
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#8e2de2'
+        });
     }
 });
 </script>
+
+</body>
+</html>

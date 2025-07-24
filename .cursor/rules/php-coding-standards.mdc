@@ -1,0 +1,41 @@
+# PHP Coding Standards
+
+## Security Best Practices
+- Always use prepared statements for database queries to prevent SQL injection
+- Validate and sanitize all user inputs
+- Use `password_verify()` for password authentication
+- Implement proper session management
+
+## Database Query Pattern
+```php
+$stmt = mysqli_prepare($conn, "SELECT * FROM table WHERE column = ?");
+mysqli_stmt_bind_param($stmt, "s", $parameter);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+```
+
+## Session Management
+- Start session at the beginning of protected pages
+- Check session before accessing protected content
+- Redirect to login page if session is invalid
+
+## Error Handling
+- Use `mysqli_connect_error()` for database connection errors
+- Display user-friendly error messages
+- Log errors for debugging
+
+## File Structure
+- Include database connection at the top: `include "../includes/db.php"`
+- Separate HTML and PHP logic clearly
+- Use consistent indentation (4 spaces)
+
+## Form Handling
+- Always validate form data with `$_SERVER["REQUEST_METHOD"] == "POST"`
+- Use proper form method and action attributes
+- Implement CSRF protection for sensitive operations
+- Validate data format before database operations
+- Use prepared statements for all database queries
+description:
+globs:
+alwaysApply: true
+---

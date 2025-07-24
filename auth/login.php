@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $row["password"])) {
             $_SESSION["username"] = $username;
         // Benar (naik ke root tempat dashboard.php berada)
-       header("Location: http://localhost/posyandukemuning/auth/dashboard.php");
+       header("Location: beranda.php");
 
 
 

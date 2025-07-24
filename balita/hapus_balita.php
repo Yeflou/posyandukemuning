@@ -1,29 +1,106 @@
 <?php
-include('../includes/db.php'); // pastikan path sesuai
+include('../includes/db.php');
 session_start();
+
+// Cek session
+if (!isset($_SESSION["username"])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
 
 // Cek apakah ID dikirim dari URL
 if (isset($_GET['id'])) {
     $id_balita = mysqli_real_escape_string($conn, $_GET['id']);
-
-    // Jalankan query hapus
-    $query = "DELETE FROM data_balita WHERE id_balita = '$id_balita'";
-    $result = mysqli_query($conn, $query);
-
-    if (!$result) {
-        die("Gagal menghapus data: " . mysqli_error($conn));
+    
+    // Ambil nama balita untuk notifikasi
+    $nama_query = "SELECT na_balita FROM data_balita WHERE id_balita = ?";
+    $nama_stmt = $conn->prepare($nama_query);
+    $nama_stmt->bind_param("s", $id_balita);
+    $nama_stmt->execute();
+    $nama_result = $nama_stmt->get_result();
+    $nama_balita = "Unknown";
+    
+    if ($nama_row = $nama_result->fetch_assoc()) {
+        $nama_balita = $nama_row['na_balita'];
     }
+    $nama_stmt->close();
 
-    // Set session untuk notifikasi
-    $_SESSION['message'] = "✅ Data balita berhasil dihapus.";
-    $_SESSION['message_type'] = "success";
+    // Jalankan query hapus dengan prepared statement
+    $query = "DELETE FROM data_balita WHERE id_balita = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $id_balita);
+    $result = $stmt->execute();
 
-    // Redirect kembali ke laporan
-    header("Location: laporan_balita.php");
-    exit();
+    if ($result && $stmt->affected_rows > 0) {
+        // Berhasil hapus
+        echo "<!DOCTYPE html>
+        <html>
+        <head>
+            <title>Success - Data Deleted</title>
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        </head>
+        <body>
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Data Berhasil Dihapus!',
+                    text: 'Data balita \"$nama_balita\" (ID: $id_balita) telah berhasil dihapus dari sistem.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#8e2de2'
+                }).then((result) => {
+                    window.location.href = 'laporan_balita.php';
+                });
+            </script>
+        </body>
+        </html>";
+    } else {
+        // Gagal hapus
+        echo "<!DOCTYPE html>
+        <html>
+        <head>
+            <title>Error - Delete Failed</title>
+            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+        </head>
+        <body>
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal Menghapus Data!',
+                    text: 'Terjadi kesalahan saat menghapus data. Data mungkin sudah tidak ada atau terjadi kesalahan sistem.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#8e2de2'
+                }).then((result) => {
+                    window.location.href = 'laporan_balita.php';
+                });
+            </script>
+        </body>
+        </html>";
+    }
+    
+    $stmt->close();
 } else {
-    // Jika tidak ada ID, kembali tanpa aksi
-    header("Location: laporan_balita.php");
-    exit();
+    // Jika tidak ada ID, tampilkan error
+    echo "<!DOCTYPE html>
+    <html>
+    <head>
+        <title>Error - No ID</title>
+        <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    </head>
+    <body>
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'ID Tidak Ditemukan!',
+                text: 'Tidak ada ID balita yang diberikan untuk dihapus.',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#8e2de2'
+            }).then((result) => {
+                window.location.href = 'laporan_balita.php';
+            });
+        </script>
+    </body>
+    </html>";
 }
+
+$conn->close();
 ?>

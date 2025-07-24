@@ -1,0 +1,48 @@
+# HTML and CSS Patterns
+
+## HTML Structure
+- Use `<!DOCTYPE html>` and proper HTML5 structure
+- Set `lang="id"` for Indonesian language
+- Use UTF-8 charset: `<meta charset="UTF-8">`
+- Include Font Awesome for icons: `https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css`
+
+## CSS Styling Patterns
+- Use 'Segoe UI' as primary font family
+- Color scheme: Purple gradient (#8c52ff to #34c5cb) for headers
+- Background colors: #FDFBFF for body, #f2eaff for containers
+- Border radius: 25px for buttons, 30px for containers
+- Box shadows: `0 0 15px rgba(0,0,0,0.1)` for cards
+
+## Button Styling
+```css
+.button {
+    padding: 12px 24px;
+    background-color: #EBD6FB;
+    color: #4b3e58;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+```
+
+## Table Styling
+- Use `border-collapse: collapse` for clean tables
+- Consistent padding: 8px for cells
+- Border: 1px solid #999
+
+## Responsive Design
+- Use `@media(max-width: 768px)` for mobile responsiveness
+- Flexbox for layout: `display: flex; justify-content: center; align-items: center;`
+- Mobile-first approach with `flex-direction: column` on small screens
+
+## Form Styling
+- Input groups with icons using absolute positioning
+- Rounded inputs with 25px border-radius
+- Purple theme: #8e2de2 for primary buttons
+- Real-time validation with visual feedback
+- Status indicators for field validation
+description:
+globs:
+alwaysApply: true
+---

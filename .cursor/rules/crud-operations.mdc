@@ -1,0 +1,63 @@
+# CRUD Operations Pattern
+
+## Standard CRUD File Structure
+Each module follows this pattern:
+- `data_*.php` - List/display all records
+- `input_*.php` - Form to add new record
+- `edit_*.php` - Form to edit existing record
+- `hapus_*.php` - Delete record
+- `simpan_*.php` - Process form submission for new record
+- `update_*.php` - Process form submission for editing
+
+## Data Display Pattern
+```php
+$result = mysqli_query($conn, "SELECT * FROM table_name");
+while ($row = mysqli_fetch_assoc($result)) {
+    echo "<tr>";
+    echo "<td>" . $row['column_name'] . "</td>";
+    echo "</tr>";
+}
+```
+
+## Form Submission Pattern
+```php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $field1 = $_POST["field1"];
+    $field2 = $_POST["field2"];
+    
+    // Validate format before submission
+    if (!preg_match('/^\d{6}$/', $id_balita)) {
+        // Handle format error
+    }
+    
+    $stmt = mysqli_prepare($conn, "INSERT INTO table_name (field1, field2) VALUES (?, ?)");
+    mysqli_stmt_bind_param($stmt, "ss", $field1, $field2);
+    mysqli_stmt_execute($stmt);
+}
+```
+
+## Edit Record Pattern
+```php
+$id = $_GET["id"];
+$stmt = mysqli_prepare($conn, "SELECT * FROM table_name WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$row = mysqli_fetch_assoc($result);
+```
+
+## Delete Confirmation
+Always use JavaScript confirmation:
+```html
+<a href="hapus_file.php?id=<?= $row['id'] ?>" 
+   onclick="return confirm('Yakin hapus data ini?')">Hapus</a>
+```
+
+## Action Buttons
+Standard action buttons in tables:
+- Edit: `<a href="edit_file.php?id=<?= $row['id'] ?>">Edit</a>`
+- Delete: `<a href="hapus_file.php?id=<?= $row['id'] ?>" onclick="return confirm('Yakin hapus data ini?')">Hapus</a>`
+description:
+globs:
+alwaysApply: true
+---
