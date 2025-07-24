@@ -25,48 +25,93 @@ if (isset($_GET['id'])) {
     }
     $nama_stmt->close();
 
-    // Jalankan query hapus dengan prepared statement
-    $query = "DELETE FROM data_balita WHERE id_balita = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $id_balita);
-    $result = $stmt->execute();
+    // Mulai transaksi untuk memastikan konsistensi data
+    $conn->begin_transaction();
+    
+    try {
+        // Pertama, hapus semua data pemeriksaan yang terkait dengan balita ini
+        $delete_pemeriksaan_query = "DELETE FROM pemeriksaan_balita WHERE id_balita = ?";
+        $pemeriksaan_stmt = $conn->prepare($delete_pemeriksaan_query);
+        $pemeriksaan_stmt->bind_param("s", $id_balita);
+        $pemeriksaan_stmt->execute();
+        $pemeriksaan_stmt->close();
+        
+        // Kemudian, hapus data balita
+        $query = "DELETE FROM data_balita WHERE id_balita = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $id_balita);
+        $result = $stmt->execute();
 
-    if ($result && $stmt->affected_rows > 0) {
-        // Berhasil hapus
+        if ($result && $stmt->affected_rows > 0) {
+            // Commit transaksi jika berhasil
+            $conn->commit();
+            
+            // Berhasil hapus
+            echo "<!DOCTYPE html>
+            <html>
+            <head>
+                <title>Success - Data Deleted</title>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Data Berhasil Dihapus!',
+                        text: 'Data balita \"$nama_balita\" (ID: $id_balita) dan semua data pemeriksaan terkait telah berhasil dihapus dari sistem.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#8e2de2'
+                    }).then((result) => {
+                        window.location.href = 'laporan_balita.php';
+                    });
+                </script>
+            </body>
+            </html>";
+        } else {
+            // Rollback jika gagal
+            $conn->rollback();
+            
+            // Gagal hapus
+            echo "<!DOCTYPE html>
+            <html>
+            <head>
+                <title>Error - Delete Failed</title>
+                <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            </head>
+            <body>
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Menghapus Data!',
+                        text: 'Terjadi kesalahan saat menghapus data. Data mungkin sudah tidak ada atau terjadi kesalahan sistem.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#8e2de2'
+                    }).then((result) => {
+                        window.location.href = 'laporan_balita.php';
+                    });
+                </script>
+            </body>
+            </html>";
+        }
+        
+        $stmt->close();
+        
+    } catch (Exception $e) {
+        // Rollback jika terjadi error
+        $conn->rollback();
+        
         echo "<!DOCTYPE html>
         <html>
         <head>
-            <title>Success - Data Deleted</title>
-            <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-        </head>
-        <body>
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Data Berhasil Dihapus!',
-                    text: 'Data balita \"$nama_balita\" (ID: $id_balita) telah berhasil dihapus dari sistem.',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#8e2de2'
-                }).then((result) => {
-                    window.location.href = 'laporan_balita.php';
-                });
-            </script>
-        </body>
-        </html>";
-    } else {
-        // Gagal hapus
-        echo "<!DOCTYPE html>
-        <html>
-        <head>
-            <title>Error - Delete Failed</title>
+            <title>Error - Database Error</title>
             <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
         </head>
         <body>
             <script>
                 Swal.fire({
                     icon: 'error',
-                    title: 'Gagal Menghapus Data!',
-                    text: 'Terjadi kesalahan saat menghapus data. Data mungkin sudah tidak ada atau terjadi kesalahan sistem.',
+                    title: 'Error Database!',
+                    text: 'Terjadi kesalahan database saat menghapus data. Silakan coba lagi.',
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#8e2de2'
                 }).then((result) => {
@@ -76,8 +121,6 @@ if (isset($_GET['id'])) {
         </body>
         </html>";
     }
-    
-    $stmt->close();
 } else {
     // Jika tidak ada ID, tampilkan error
     echo "<!DOCTYPE html>
