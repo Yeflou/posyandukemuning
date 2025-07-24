@@ -105,7 +105,7 @@ if (!isset($_SESSION["username"])) {
     <a href="#" onclick="loadPage('/posyandukemuning/pemeriksaan/input_pemeriksaan.php')"><i class="fas fa-notes-medical"></i> Input Data Pemeriksaan Balita</a>
     <a href="#" onclick="loadPage('/posyandukemuning/balita/laporan_balita.php')"><i class="fas fa-file-alt"></i> Laporan Data Balita</a>
     <a href="#" onclick="loadPage('/posyandukemuning/pemeriksaan/laporan_pemeriksaan.php')"><i class="fas fa-shield-alt"></i> Laporan Pemeriksaan Balita</a>
-    <a href="auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <a href="/posyandukemuning/auth/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </div>
 
     </div>

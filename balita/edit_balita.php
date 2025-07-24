@@ -1,64 +1,69 @@
 <?php
-include "includes/db.php";
+include "../includes/db.php";
 session_start();
 
-$id = $_GET['id'];
-$data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM data_balita WHERE id_balita='$id'"));
+if (!isset($_SESSION["username"])) {
+    header("Location: ../auth/login.php");
+    exit();
+}
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $na_balita = $_POST["na_balita"];
-    $nik_balita = $_POST["nik_balita"];
-    $alamat_balita = $_POST["alamat_balita"];
-    $tempat_lahir = $_POST["tempat_lahir"];
-    $tanggal_lahir = $_POST["tanggal_lahir"];
-    $jenis_kelamin = $_POST["jenis_kelamin"];
-    $na_ibu = $_POST["na_ibu"];
-    $nik_ibu = $_POST["nik_ibu"];
-    $alamat_ibu = $_POST["alamat_ibu"];
-    $no_tlp = $_POST["no_tlp"];
+// Ambil ID dari URL
+$id_balita = $_GET['id'] ?? null;
 
-    $sql = "UPDATE data_balita SET 
-        na_balita='$na_balita',
-        nik_balita='$nik_balita',
-        alamat_balita='$alamat_balita',
-        tempat_lahir='$tempat_lahir',
-        tanggal_lahir_balita='$tanggal_lahir',
-        jenis_kelamin='$jenis_kelamin',
-        na_ibu='$na_ibu',
-        nik_ibu='$nik_ibu',
-        alamat_ibu='$alamat_ibu',
-        no_tlp='$no_tlp'
-        WHERE id_balita='$id'";
+// Cek ID valid
+if (!$id_balita) {
+    echo "ID tidak ditemukan!";
+    exit();
+}
 
-    if (mysqli_query($conn, $sql)) {
-        echo "<script>alert('Data berhasil diupdate'); window.location.href='data_balita.php';</script>";
-    } else {
-        echo "Gagal update: " . mysqli_error($conn);
-    }
+// Ambil data balita dari database
+$sql = "SELECT * FROM data_balita WHERE id_balita = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $id_balita);
+$stmt->execute();
+$result = $stmt->get_result();
+$data = $result->fetch_assoc();
+
+// Jika data tidak ditemukan
+if (!$data) {
+    echo "Data balita tidak ditemukan.";
+    exit();
 }
 ?>
 
-<!DOCTYPE html>
-<html>
-<head><title>Edit Balita</title></head>
-<body>
-    <h2>Edit Data Balita</h2>
-    <form method="POST">
-        Nama Balita: <input type="text" name="na_balita" value="<?= $data['na_balita'] ?>"><br>
-        NIK Balita: <input type="text" name="nik_balita" value="<?= $data['nik_balita'] ?>"><br>
-        Alamat: <input type="text" name="alamat_balita" value="<?= $data['alamat_balita'] ?>"><br>
-        Tempat Lahir: <input type="text" name="tempat_lahir" value="<?= $data['tempat_lahir'] ?>"><br>
-        Tanggal Lahir: <input type="date" name="tanggal_lahir" value="<?= $data['tanggal_lahir_balita'] ?>"><br>
-        Jenis Kelamin:
-        <select name="jenis_kelamin">
-            <option value="Laki-laki" <?= $data['jenis_kelamin']=='Laki-laki'?'selected':'' ?>>Laki-laki</option>
-            <option value="Perempuan" <?= $data['jenis_kelamin']=='Perempuan'?'selected':'' ?>>Perempuan</option>
+<div class="main">
+    <h2 style="color: #8e2de2;">Edit Data Balita</h2>
+
+    <form action="update_balita.php" method="post" style="max-width: 800px; margin: auto;">
+        <input type="hidden" name="id_balita" value="<?= $data['id_balita'] ?>">
+
+        <label>Nama Ibu:</label>
+        <input type="text" name="na_ibu" value="<?= $data['na_ibu'] ?>" required><br>
+
+        <label>NIK:</label>
+        <input type="text" name="nik_balita" value="<?= $data['nik_balita'] ?>" required><br>
+
+        <label>Nama Balita:</label>
+        <input type="text" name="na_balita" value="<?= $data['na_balita'] ?>" required><br>
+
+        <label>Alamat:</label>
+        <input type="text" name="alamat_balita" value="<?= $data['alamat_balita'] ?>" required><br>
+
+        <label>Tempat Lahir:</label>
+        <input type="text" name="tempat_lahir" value="<?= $data['tempat_lahir'] ?>" required><br>
+
+        <label>Tanggal Lahir:</label>
+        <input type="date" name="tanggal_lahir_balita" value="<?= $data['tanggal_lahir_balita'] ?>" required><br>
+
+        <label>Jenis Kelamin:</label>
+        <select name="jenis_kelamin" required>
+            <option value="Laki-laki" <?= $data['jenis_kelamin'] == 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
+            <option value="Perempuan" <?= $data['jenis_kelamin'] == 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
         </select><br>
-        Nama Ibu: <input type="text" name="na_ibu" value="<?= $data['na_ibu'] ?>"><br>
-        NIK Ibu: <input type="text" name="nik_ibu" value="<?= $data['nik_ibu'] ?>"><br>
-        Alamat Ibu: <input type="text" name="alamat_ibu" value="<?= $data['alamat_ibu'] ?>"><br>
-        No Telp: <input type="text" name="no_tlp" value="<?= $data['no_tlp'] ?>"><br>
+
+        <label>No Telp:</label>
+        <input type="text" name="no_tlp" value="<?= $data['no_tlp'] ?>"><br>
+
         <button type="submit">Simpan Perubahan</button>
     </form>
-</body>
-</html>
+</div>
