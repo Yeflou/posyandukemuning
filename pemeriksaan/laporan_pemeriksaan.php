@@ -46,6 +46,12 @@ $result = mysqli_query($conn, $query);
     <div class="main">
         <h2>Laporan Pemeriksaan Balita</h2>
 
+        <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+            <div class="success-message">
+                ✅ Data pemeriksaan berhasil disimpan!
+            </div>
+        <?php endif; ?>
+
         <!-- Search dan Tombol -->
         <div class="search-container">
             <div class="search-box">

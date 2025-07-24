@@ -3,7 +3,7 @@ include "../includes/db.php";
 session_start();
 
 // Default redirect
-$redirect_page = "../auth/dashboard.php?page=input_pemeriksaan";
+$redirect_page = "laporan_pemeriksaan.php";
 $redirect_status = "error";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $conn->close();
-    header("Location: " . $redirect_page . "&status=" . $redirect_status);
+    header("Location: " . $redirect_page . "?status=" . $redirect_status);
     exit();
 } else {
     // Jika bukan POST, langsung redirect
